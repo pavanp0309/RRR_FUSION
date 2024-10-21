@@ -1,0 +1,57 @@
+.signin-container {
+    height: 100vh;
+    background: #f0f2f5;
+  }
+  
+  .form-col {
+    background: white;
+    padding: 0;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .welcome-section {
+    background: linear-gradient(135deg, #2ecc71, #1abc9c);
+    color: white;
+    text-align: center;
+    padding: 30px;
+    border-radius: 10px 0 0 10px;
+  
+  }
+  
+  .create-account-btn {
+    margin-top: 20px;
+    background: white;
+    color: #2ecc71;
+    border: none;
+    width: 80%;
+    font-weight: bold;
+    border-radius: 25px;
+  }
+  
+  .form-section {
+    padding: 30px;
+    text-align: center;
+  }
+  
+  .social-login .social-btn {
+    margin: 0 10px;
+  }
+  
+  .signin-btn {
+    width: 100%;
+    background: #2ecc71;
+    border: none;
+    border-radius: 25px;
+    font-weight: bold;
+  }
+  
+  @media screen and (max-width: 768px) {
+    .welcome-section {
+      border-radius: 10px 10px 0 0;
+    }
+    .form-col {
+      border-radius: 10px;
+    }
+  }
+  

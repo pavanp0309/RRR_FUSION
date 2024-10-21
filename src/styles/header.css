@@ -1,0 +1,38 @@
+.header {
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Adjusted to space-between */
+    padding: 0 16px;
+    height: 64px;
+    
+  }
+  
+  .header-left {
+    flex: 1;
+    display: flex;
+    justify-content: center; /* Ensures the search bar is centered */
+    align-items: center;
+  }
+  
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .search-bar {
+    width: 100%;
+    max-width: 600px; /* Limit the maximum width */
+    height: 40px;
+  
+    border-radius: 4px;
+  }
+  
+  @media (min-width:350px)and  (max-width: 768px) {
+    .header {
+      flex-wrap: wrap;
+      
+    }
+  }
+  
+  
