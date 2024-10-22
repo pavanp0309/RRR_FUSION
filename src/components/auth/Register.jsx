@@ -12,7 +12,7 @@ const SignUp = () => {
 
   const navigate = useNavigate()
   // distructuring register for useAUth custom hook
-  const { Register } = useAuth()
+  const { Register,loading } = useAuth()
 
   const onFinish = async (values) => {
     try {
@@ -110,7 +110,11 @@ const SignUp = () => {
 
               {/* Sign Up Button */}
               <Form.Item>
-                <Button type="primary" htmlType="submit" className="signup-btn">
+                <Button type="primary" htmlType="submit"
+                 className="signup-btn"
+                 loading={loading}
+                 disabled={loading}
+                 >
                   Sign Up
                 </Button>
               </Form.Item>

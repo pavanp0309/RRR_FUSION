@@ -5,7 +5,7 @@ import { GoogleOutlined, FacebookOutlined, LinkedinOutlined } from '@ant-design/
 import useAuth from '../../hooks/useAuth';
 
 const SocialLogin = () => {
-  const { signInWithGoogle } = useAuth();
+  const { GoogleSignIn,facebookSignIn,loading } = useAuth();
 
   return (
     <div className="social-login">
@@ -14,13 +14,18 @@ const SocialLogin = () => {
         icon={<GoogleOutlined />}
         size="large"
         className="social-btn google"
-        onClick={signInWithGoogle}
+        loading={loading}
+        disabled={loading}
+        onClick={GoogleSignIn}
       />
       <Button
         shape="circle"
         icon={<FacebookOutlined />}
         size="large"
         className="social-btn facebook"
+        loading={loading}
+        disabled={loading}
+        onClick={facebookSignIn}
       />
       <Button
         shape="circle"

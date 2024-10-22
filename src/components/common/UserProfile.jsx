@@ -8,11 +8,12 @@ import { UserOutlined, SettingOutlined, HomeOutlined, LogoutOutlined, LoginOutli
 
 
 
-const UserProfile = ({ imgUrl }) => {
+const UserProfile = () => {
   let navigate = useNavigate()
   let { Logout } = useAuth()
 
   let isAuthenticated = useSelector(state => state.auth.isAuthenticated)
+  let user = useSelector(state => state.auth.user)
 
   // function to handle the Logout 
   let handleLogout = async () => {
@@ -47,10 +48,10 @@ const UserProfile = ({ imgUrl }) => {
   return (
     <Dropdown overlay={menu} trigger={["click"]}>
       <Avatar
-        src={imgUrl || ""}
+        src={user && user.photoURL || ""}
 
         size="large"
-        icon={imgUrl ? <UserOutlined /> : null}
+        icon={user && user.photoURL ? <UserOutlined /> : null}
       />
     </Dropdown>
   )

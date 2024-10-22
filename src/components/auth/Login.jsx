@@ -9,7 +9,7 @@
 
   const SignIn = () => {
      let navigate=useNavigate()
-     let {Login}=useAuth()
+     let {Login,loading}=useAuth()
   
     const onFinish = async (values) => {
       const {email,password}=values
@@ -59,7 +59,11 @@
                   <Input.Password placeholder="Password" />
                 </Form.Item>
                 <Form.Item>
-                  <Button type="primary" htmlType="submit" className="signin-btn">
+                  <Button type="primary" htmlType="submit"
+                   className="signin-btn"
+                   loading={loading}
+                   disabled={loading}
+                   >
                     Sign In
                   </Button>
                 </Form.Item>
