@@ -5,6 +5,7 @@ import FooterComp from './Footer'
 import ContentComp from './Content'
 import { Layout } from 'antd'
 import "../../styles/main.css"
+import ProfileComponent from '../../pages/ProfilePage'
 
 const MainLayout = () => {
   return (
@@ -12,7 +13,8 @@ const MainLayout = () => {
     <SideNavComp/>
     <Layout>
       <HeaderComp/>
-      <ContentComp/>
+      {/* <ContentComp/>    */}
+      <ProfileComponent/>
       <FooterComp/>
     </Layout>
     </Layout>
