@@ -12,12 +12,6 @@ import {
   GoogleAuthProvider, signInWithPopup, FacebookAuthProvider
 } from "firebase/auth";
 
-
-
-
-
-
-
 const useAuth = () => {
   let [loading, setLoading] = useState(false)
   let dispatch = useDispatch()
