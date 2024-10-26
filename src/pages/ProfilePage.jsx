@@ -1,14 +1,69 @@
-import React from 'react';
+import {useState} from 'react';
 import { Card, Avatar, Button, Input, Switch, Divider, Select } from 'antd';
 import { UserOutlined, LockOutlined, PhoneOutlined, MailOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
-
+import useAuth from '../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 const { Option } = Select;
 
 const ProfileComponent = () => {
+  
   // Access user data from the Redux store
   const user = useSelector((state) => state.auth.user); // Corrected to access the 'auth' slice
+
+  const { deleteAccount, loading} = useAuth();
  
+  const [notifications, setNotifications] = useState({
+    push: true,
+    email: true,
+    sms: false,
+  });
+  const navigate = useNavigate(); 
+
+  // Toggle modal visibility
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleOk = () => {
+    // Here you would handle profile update logic, e.g., updating user details in Firestore
+    setIsModalVisible(false);
+    message.success('Profile updated successfully');
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  // Handle Notification Switches
+  const handleNotificationChange = (type, checked) => {
+    setNotifications({
+      ...notifications,
+      [type]: checked,
+    });
+    message.info(`${type.charAt(0).toUpperCase() + type.slice(1)} notifications ${checked ? 'enabled' : 'disabled'}`);
+  };
+  const handleDeleteAccount = () => {
+    if (window.confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
+      deleteAccount();
+    }
+  };
+
+  // Function to handle connected accounts navigation
+  const handleConnectAccount = (platform) => {
+    const urls = {
+      google: 'https://accounts.google.com/',
+      facebook: 'https://www.facebook.com/',
+      twitter: 'https://twitter.com/login',
+    };
+
+    if (urls[platform]) {
+      window.location.href = urls[platform];
+    } else {
+      message.warning('Unknown platform');
+    }
+  };
+
   return (
     <Card style={{ maxWidth: 700, margin: '0 auto', backgroundColor: '#1a1a2e', color: 'white', padding: 20 }}>
       {/* Profile Section */}
@@ -52,15 +107,15 @@ const ProfileComponent = () => {
         <h2 style={{ color: 'white' }}>Notifications</h2>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
           <span style={{ color: 'white' }}>Push Notifications</span>
-          <Switch defaultChecked />
+          <Switch checked={notifications.push} onChange={(checked) => handleNotificationChange('push', checked)} />
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
           <span style={{ color: 'white' }}>Email Notifications</span>
-          <Switch />
+          <Switch checked={notifications.email} onChange={(checked) => handleNotificationChange('email', checked)}/>
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
           <span style={{ color: 'white' }}>SMS Notifications</span>
-          <Switch />
+          <Switch checked={notifications.sms} onChange={(checked) => handleNotificationChange('sms', checked)}/>
         </div>
       </div>
 
@@ -88,11 +143,11 @@ const ProfileComponent = () => {
         <h2 style={{ color: 'white' }}>Connected Accounts</h2>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
           <span style={{ color: 'white' }}>Google</span>
-          <Button type="primary" ghost>Connected</Button>
+          <Button type="primary" ghost onClick={() => handleConnectAccount('google')}>Connected</Button>
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
           <span style={{ color: 'white' }}>Facebook</span>
-          <Button type="primary" ghost>Connected</Button>
+          <Button type="primary" ghost  onClick={() => handleConnectAccount('facebook')}>Connected</Button>
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
           <span style={{ color: 'white' }}>Twitter</span>
@@ -105,7 +160,7 @@ const ProfileComponent = () => {
       {/* Danger Zone Section */}
       <div style={{ textAlign: 'center' }}>
         <h2 style={{ color: 'red' }}>Danger Zone</h2>
-        <Button type="primary" danger>
+        <Button type="primary" danger onClick={handleDeleteAccount} loading={loading} disabled={loading}>
           Delete Account
         </Button>
       </div>

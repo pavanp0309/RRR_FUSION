@@ -6,6 +6,7 @@ import ContentComp from './Content'
 import { Layout } from 'antd'
 import "../../styles/main.css"
 
+
 const MainLayout = () => {
   return (
     <Layout style={{minHeight:"100vh"}}>
@@ -13,7 +14,9 @@ const MainLayout = () => {
     <Layout>
       <HeaderComp/>
       <ContentComp/>
+      
       <FooterComp/>
+      
     </Layout>
     </Layout>
      

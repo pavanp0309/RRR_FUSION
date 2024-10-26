@@ -2,28 +2,28 @@ import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
 import { setUser, logout as logoutAction, setRole, logout } from '../features/users/userSlice'
-import { doc, setDoc, getDoc } from "firebase/firestore"
+import { doc, setDoc, getDoc,deleteDoc} from "firebase/firestore"
 import { auth, db } from '../config/Firebaseconfig';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword, signOut as firebaseSignOut,
   browserLocalPersistence, setPersistence,
   onAuthStateChanged, updateProfile, updateEmail, updatePassword,
-  GoogleAuthProvider, signInWithPopup, FacebookAuthProvider
+  GoogleAuthProvider, signInWithPopup, FacebookAuthProvider,deleteUser
 } from "firebase/auth";
-
-
-
-
 
 
 
 const useAuth = () => {
   let [loading, setLoading] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useState(false); // New state to control rendering
+ 
   let dispatch = useDispatch()
   let navigate = useNavigate()
   const Googleprovider = new GoogleAuthProvider();
   const facebookprovider = new FacebookAuthProvider();
+
+  
 
   // function to Register 
   const Register = async (fullName, email, password, mobile) => {
@@ -130,6 +130,8 @@ const useAuth = () => {
       setLoading(false)
     }
   }
+
+  
 
   // function to googlesignin
   const GoogleSignIn = async () => {
@@ -239,31 +241,47 @@ const useAuth = () => {
       setLoading(false)
     }
   }
+  
 
-    // function to logout
-    const Logout = async () => {
-      try {
-        await firebaseSignOut(auth)
-        dispatch(logoutAction())
-        navigate("/signin")
-      } catch (error) {
-        console.log("Failed to logout the user:", error.message);
-      }
+   // Delete Account function
+   const deleteAccount = async () => {
+    setLoading(true);
+    try {
+      const user = auth.currentUser;
+      if (!user) throw new Error("No user is currently signed in.");
+      await deleteDoc(doc(db, "Users", user.uid));
+      await deleteUser(user);
+      dispatch(logoutAction());
+      navigate("/signin");
+      console.log("Account deleted successfully.");
+    } catch (error) {
+      console.error("Failed to delete account:", error.message);
+    } finally {
+      setLoading(false);
     }
+  };
 
+  // Logout function
+  const Logout = async () => {
+    try {
+      await firebaseSignOut(auth);
+      dispatch(logoutAction());
+      navigate("/signin");
+    } catch (error) {
+      console.log("Failed to logout the user:", error.message);
+    }
+  };
+
+  // Auth State Check function
   const CheckAuthState = () => {
-    setLoading(true)
+    setLoading(true);
     onAuthStateChanged(auth, async (user) => {
       if (user) {
-        // Destructure the user data correctly
         const { uid, displayName, email, photoURL } = user;
-        // getting the userdata from  firestore 
         const userDoc = await getDoc(doc(db, "Users", uid));
 
         if (userDoc.exists()) {
-          console.log("Document data:", userDoc.data());
-          let userDataFromFirestore = userDoc.data()
-          // creating the user structure to store in redux
+          let userDataFromFirestore = userDoc.data();
           let userData = {
             uid,
             displayName: displayName || userDataFromFirestore.displayName,
@@ -273,39 +291,27 @@ const useAuth = () => {
             role: userDataFromFirestore.role || "user",
             createdAt: userDataFromFirestore.createdAt,
             isOnline: true,
-
-          }
-
-
-          // Dispatch user details to Redux state
+          };
           dispatch(setUser(userData));
-          dispatch(setRole(userData.role))
-
-          console.log("User loggedin successfully");
-
-
-
-          // Redirecting to different url if path is not sign or register 
-          if (window.location.pathname !== "/signin" && window.location.pathname !== "/register") {
-            navigate("/");
-          }
-
+          dispatch(setRole(userData.role));
+          setIsAuthenticated(true); // Set authenticated state
         } else {
-          dispatch(logoutAction())
-          if (window.location.pathname !== "/signin" && window.location.pathname !== "/register") {
+          dispatch(logoutAction());
+          if (!["/signin", "/register"].includes(window.location.pathname)) {
             navigate("/signin");
           }
         }
+      } else {
+        setIsAuthenticated(false);
       }
     });
-    setLoading(false)
-  }
+    setLoading(false);
+  };
 
   useEffect(() => {
-    CheckAuthState()
-  }, [])
-
-  return { Register, Login, Logout,GoogleSignIn,facebookSignIn ,loading}
-}
+    CheckAuthState();
+  }, []);
+  return { Register, Login, Logout,GoogleSignIn,facebookSignIn ,deleteAccount,loading,isAuthenticated}
+};
 
 export default useAuth

@@ -1,11 +1,12 @@
 import React from 'react'
 import { Layout } from 'antd';
-const {  Content,  } = Layout;
+const {  Content  } = Layout;
+import { Outlet } from 'react-router-dom';
 
 const ContentComp = () => {
   return (
   <Content>
-    Main Content
+   <Outlet/>
   </Content>
   )
 }
