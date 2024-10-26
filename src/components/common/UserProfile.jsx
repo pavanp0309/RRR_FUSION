@@ -34,7 +34,7 @@ const UserProfile = () => {
         isAuthenticated ? (
           <>
             <Menu.Item key="1" icon={<HomeOutlined />}>Home</Menu.Item>
-            <Menu.Item key="2" icon={<UserOutlined />}>Profile</Menu.Item>
+            <Menu.Item key="2" icon={<UserOutlined />} onClick={()=>navigate('/profile')}>Profile</Menu.Item>
             <Menu.Item key="3" icon={<SettingOutlined />}>Settings</Menu.Item>
             <Menu.Item key="4" icon={<LogoutOutlined />} onClick={() => handleLogout()}>Logout</Menu.Item>
           </>
