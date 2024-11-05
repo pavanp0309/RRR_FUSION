@@ -8,6 +8,7 @@ const { Option } = Select;
 const ProfileComponent = () => {
   // Access user data from the Redux store
   const user = useSelector((state) => state.auth.user); // Corrected to access the 'auth' slice
+  let photo=user?.photoURL || {}
  
   return (
     <Card style={{ maxWidth: 700, margin: '0 auto', backgroundColor: '#1a1a2e', color: 'white', padding: 20 }}>
@@ -15,7 +16,7 @@ const ProfileComponent = () => {
       <div style={{ marginBottom: 30 }}>
         <h2 style={{ color: 'white' }}>Profile</h2>
         <div style={{ display: 'flex', alignItems: 'center', marginBottom: 20 }}>
-          <Avatar size={80} icon={<UserOutlined />} style={{ marginRight: 20 }} />
+          <Avatar size={80} icon={<UserOutlined />} style={{ marginRight: 20 }} src={photo}/>
           <div>
             <h3 style={{ color: 'white' }}>{user?.displayName || 'User Name'}</h3>
             <Button type="primary" style={{ marginTop: 10 }}>Edit Profile</Button>

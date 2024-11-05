@@ -3,6 +3,7 @@ import { Avatar, Menu } from 'antd';
 import { Dropdown } from "antd";
 import { useSelector } from 'react-redux';
 import useAuth from '../../hooks/useAuth';
+
 import { Navigate, useNavigate } from 'react-router-dom';
 import { UserOutlined, SettingOutlined, HomeOutlined, LogoutOutlined, LoginOutlined } from '@ant-design/icons';
 
@@ -14,7 +15,9 @@ const UserProfile = () => {
 
   let isAuthenticated = useSelector(state => state.auth.isAuthenticated)
   let user = useSelector(state => state.auth.user)
-
+  
+  let photo=user?.photoURL || {}
+console.log(photo)
   // function to handle the Logout 
   let handleLogout = async () => {
     try {
@@ -34,7 +37,7 @@ const UserProfile = () => {
         isAuthenticated ? (
           <>
             <Menu.Item key="1" icon={<HomeOutlined />}>Home</Menu.Item>
-            <Menu.Item key="2" icon={<UserOutlined />}>Profile</Menu.Item>
+            <Menu.Item key="2" icon={<UserOutlined />} onClick={(()=>navigate('/profile'))}>Profile</Menu.Item>
             <Menu.Item key="3" icon={<SettingOutlined />}>Settings</Menu.Item>
             <Menu.Item key="4" icon={<LogoutOutlined />} onClick={() => handleLogout()}>Logout</Menu.Item>
           </>
@@ -46,12 +49,13 @@ const UserProfile = () => {
   )
 
   return (
+
     <Dropdown overlay={menu} trigger={["click"]}>
       <Avatar
-        src={user && user.photoURL || ""}
+        src={photo || ""}
 
         size="large"
-        icon={user && user.photoURL ? <UserOutlined /> : null}
+        icon={photo? <UserOutlined /> : null}
       />
     </Dropdown>
   )
