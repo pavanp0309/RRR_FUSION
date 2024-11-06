@@ -24,7 +24,13 @@ export const cryptoMarketApi = createApi({
         query: () =>  createRequest('/coins'),
       }),
       getcryptoStats: builder.query({
-        query: () =>  createRequest('/stats'),
+        query: () =>  createRequest('/stats')
+      }),
+      getcryptoDetails:  builder.query({
+        query: (coinId) =>  createRequest(`/coin/${coinId}`)
+      }),
+      getcryptoHistory:  builder.query({
+        query: ({coinId,timePeriod="3m"}) =>  createRequest(`/coin/${coinId}/history?timePeriod=${timePeriod}`)
       }),
     }),
   })
@@ -32,5 +38,5 @@ export const cryptoMarketApi = createApi({
 
   // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const {useGetcryptoMarketsQuery,useGetcryptoStatsQuery} = cryptoMarketApi
+export const {useGetcryptoMarketsQuery,useGetcryptoStatsQuery,useGetcryptoDetailsQuery,useGetcryptoHistoryQuery} = cryptoMarketApi
 
